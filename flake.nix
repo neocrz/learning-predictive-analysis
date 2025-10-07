@@ -28,8 +28,11 @@
           [
             python312
             cudaPackages.cudatoolkit
+            graphviz
           ]
           ++ (with pkgs.python312Packages; [
+            graphviz
+            seaborn
             arviz
             ipywidgets
             pillow
@@ -51,12 +54,31 @@
                 doCheck = false;
               }
             )
+            (
+              buildPythonPackage rec {
+                pname = "kagglehub";
+                version = "0.3.13";
+                src = fetchPypi {
+                  inherit pname version;
+                  sha256 = "sha256-08i2JQYn1mUJbNkalIdVm/XtYb5gfq9j0UURsg7qZG4=";
+                };
+                doCheck = false;
+                format = "pyproject";
+                nativeBuildInputs = with pkgs.python312Packages; [
+                  hatchling
+                ];
+                propagatedBuildInputs = with pkgs.python312Packages; [
+                  pyyaml
+                  requests
+                  tqdm
+                ];
+              }
+            )
           ]);
         shellHook = ''
-          echo "Python development environment with NumPy, Pandas, and PyTorch (CUDA)"
+          echo "Python development environment with CUDA"
           export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
           export LD_LIBRARY_PATH=${pkgs.cudaPackages.cudatoolkit}/lib64:$LD_LIBRARY_PATH
-          echo "Run 'nvidia-offload python' to execute Python with NVIDIA GPU support"
         '';
       };
     });
