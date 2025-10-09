@@ -31,6 +31,9 @@
             graphviz
           ]
           ++ (with pkgs.python312Packages; [
+            scikit-learn
+            geopandas
+            shapely
             graphviz
             seaborn
             arviz
