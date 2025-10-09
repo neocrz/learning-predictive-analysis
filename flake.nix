@@ -31,6 +31,8 @@
             graphviz
           ]
           ++ (with pkgs.python312Packages; [
+            folium
+            plotly
             scikit-learn
             geopandas
             shapely
